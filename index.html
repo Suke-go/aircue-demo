@@ -1,0 +1,55 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>AirCue — スピーカーで触覚刺激を。</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="waveform.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <header><a class="brand" href="./">aircue</a><button id="output-settings" class="text-button">音声出力の設定<span class="en" lang="en">Audio output settings</span></button><button id="fullscreen" class="text-button">全画面にする ↗<span class="en" lang="en">Full screen</span></button></header>
+  <main>
+    <section class="intro"><h1>スピーカーで触覚刺激を。</h1><p class="en" lang="en">Feel a touch of air, powered by a speaker.</p></section>
+    <section class="experiment" aria-label="空気砲の操作">
+      <div class="side-card"><h2>音だけでなく、風もつくる。<span class="en" lang="en">More than sound. A pulse of air.</span></h2>
+        <svg class="diagram" viewBox="0 0 340 160" role="img" aria-label="振動板が空気を押し出し、開口部で渦の輪ができて手に届く模式図">
+          <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="currentColor"/></marker></defs>
+          <path d="M35 35H116L140 58V102L116 125H35Z" fill="#e7e4db" stroke="#8b9286" stroke-width="2"/>
+          <path class="membrane" d="M49 40Q67 80 49 120" fill="none" stroke="#50735d" stroke-width="5"/>
+          <path d="M83 80H129" stroke="#50735d" stroke-width="2" marker-end="url(#arrow)"/>
+          <g class="vortex"><ellipse cx="155" cy="80" rx="9" ry="28"/><ellipse cx="155" cy="80" rx="4" ry="20"/></g>
+          <path d="M294 119Q277 104 276 88L269 69Q267 62 272 61Q277 60 282 74L281 44Q281 37 286 37Q291 37 291 44L295 72L296 35Q296 29 301 30Q305 30 305 36L306 73L311 43Q312 37 316 39Q320 40 319 46L317 83L322 65Q325 59 329 62Q332 64 329 71L322 104Q320 113 314 120" fill="none" stroke="#8b9286" stroke-width="2" stroke-linecap="round"/>
+          <text x="43" y="150">振動板</text><text x="161" y="150">渦の輪</text><text x="285" y="150">手のひら</text>
+        </svg>
+        <p>スピーカーの振動板で空気を押し出すと、穴の縁で渦の輪が生まれ、手のひらに短い風の刺激を届けます。<span class="en" lang="en">The speaker diaphragm pushes air through an opening, forming a vortex ring that delivers a brief puff to your palm.</span></p><small>専用の空気砲・アンプを使用した模式図です。<span class="en" lang="en">Schematic of a dedicated air cannon and amplifier.</span></small>
+      </div>
+      <div class="launch-area">
+        <div class="status" id="status" role="status" aria-live="polite">準備を確認してください<span class="en" lang="en">Please check before starting.</span></div>
+        <button id="fire" class="fire" disabled><span class="fire-icon" aria-hidden="true">◎</span><strong id="button-title">空気砲を打つ</strong><span id="button-sub">3秒後に、1回発射<span class="en" lang="en">Fire once after 3 seconds</span></span></button>
+        <button id="stop" class="stop" disabled>キャンセル <kbd>Esc</kbd><span class="en" lang="en">Cancel</span></button>
+        <div class="shot-count">発射信号 <span id="count">00</span> 回<span class="en" lang="en">Pulses sent</span></div>
+      </div>
+      <section class="safety" aria-label="使用上の注意"><h2>体験の前に<span class="en" lang="en">BEFORE YOU TRY</span></h2><p class="low-output">安全に配慮した空気砲の設計により、刺激を弱くしています。<span class="en" lang="en">The air cannon is designed to deliver a gentle stimulus.</span></p><p class="level-note">実際の強さはアンプの音量で変わります。<span class="en" lang="en">Actual intensity depends on amplifier volume.</span></p><ul><li>顔・目・耳には向けず、手のひらへ。<span class="en" lang="en">Aim at your palm, away from the face, eyes and ears.</span></li><li>違和感があれば、すぐに中止してください。<span class="en" lang="en">Stop immediately if you feel discomfort.</span></li></ul><label class="confirm"><input id="ready" type="checkbox"><span>出力先・音量・周囲を確認した<span class="en" lang="en">I checked the output, volume and surroundings.</span></span></label></section>
+    </section>
+  </main>
+  <footer><span>左右同時出力 / L + R</span><span><kbd>Esc</kbd> で停止 / Press Esc to stop</span><span id="audio-state">AUDIO STANDBY</span></footer>
+</div>
+<dialog id="output-dialog" aria-labelledby="output-title">
+  <h2 id="output-title">音声出力の設定<span class="en" lang="en">Audio output settings</span></h2>
+  <label for="output-device">出力機器<span class="en" lang="en">Output device</span></label>
+  <select id="output-device"><option value="">OSの既定 / System default</option></select>
+  <button id="output-permission" class="device-button">出力機器を選択<span class="en" lang="en">Choose output device</span></button>
+  <p id="output-message">ブラウザの許可画面から機器を選択できます。<span class="en" lang="en">Choose a device in the browser permission dialog.</span></p>
+  <label for="volume">アプリの出力音量 <output id="volume-value" for="volume">100%</output><span class="en" lang="en">App output volume</span></label>
+  <input id="volume" type="range" min="0" max="100" step="1" value="100">
+  <p>100%が元の信号です。OS・アンプの音量は変更しません。<span class="en" lang="en">100% preserves the original signal. OS and amplifier volume are unchanged.</span></p>
+  <button id="output-close" class="device-button">閉じる<span class="en" lang="en">Close</span></button>
+</dialog>
+</body>
+</html>
+
+
