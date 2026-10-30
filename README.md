@@ -2,7 +2,7 @@
 
 A bilingual, browser-based air-cannon haptics demo.
 
-https://suke-go.github.io/aircue-demo/
+https://ksk432.com/aircue-demo/
 
 Run locally: `python -m http.server 8080 --bind 127.0.0.1`, then open http://127.0.0.1:8080/.
 
@@ -15,3 +15,4 @@ GitHub Pages publishes the main branch root. No backend, build step, analytics o
 Tests: `node --test waveform.test.cjs`.
 
 Derived from AirCue. Copyright (C) 2026 AirCue contributors. GNU GPL v3 only; see LICENSE.
+
